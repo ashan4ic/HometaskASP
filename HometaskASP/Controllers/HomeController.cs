@@ -11,7 +11,12 @@ namespace HometaskASP.Controllers
 {
     public class HomeController : Controller
     {
-        DataContext db;
+        private readonly DataContext db;
+
+        public HomeController(DataContext dataContext)
+        {
+            db = dataContext;
+        }
         
         [Route("create")]
         public IActionResult Create(string name, int age)
