@@ -1,4 +1,6 @@
 using HomataskASP.DataAccess;
+using HometaskASP.Domain;
+using HometaskASP.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +18,13 @@ namespace HometaskASP
     {
        public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Host=localhost;Port=5432;Database=MYdb;Username=postgres;Password=n7vwfn5twF";
+            string connectionString = "Host=localhost;Port=5432;Database=Mydb;Username=postgres;Password=n7vwfn5twF";
             services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
 
             services.AddControllers();
+
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IUserDomain, UserDomain>();
         }
 
      

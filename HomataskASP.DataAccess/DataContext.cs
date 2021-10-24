@@ -17,7 +17,7 @@ namespace HomataskASP.DataAccess
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=MYdb;Username=postgres;Password=n7vwfn5twF");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Mydb;Username=postgres;Password=n7vwfn5twF");
         }
     }
 }

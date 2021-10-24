@@ -25,7 +25,21 @@ namespace HometaskASP.Services
                 Age = user.Age
             });
 
-            return dbUser?.Id ?? Guid.Empty;
+            return dbUser?.Id == null ? Guid.Empty : (Guid)dbUser.Id;
+        }
+
+        public List<UserModel> GetAll()
+        {
+            List<DBUser> newList = _userDomain.GetAll();
+
+            List<UserModel> result = new List<UserModel>();
+
+            foreach (var item in newList)
+            {
+                result.Add(new UserModel { Id = item.Id, Name = item.Name, Age = item.Age });
+            }
+
+            return result;
         }
     }
 }

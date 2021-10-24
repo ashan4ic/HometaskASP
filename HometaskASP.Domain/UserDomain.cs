@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HometaskASP.Domain
 {
-    public class UserDomain
+    public class UserDomain : IUserDomain
     {
         private readonly DataContext _db;
 
@@ -25,9 +25,13 @@ namespace HometaskASP.Domain
             }
 
             _db.Users.Add(user);
-
-            return _db.SaveChanges() != 0 ? user : null;
+            _db.SaveChanges();
+            return user;
         }
-    
+
+        public List<DBUser> GetAll()
+        {
+            return _db.Users.ToList();
+        }
     }
 }

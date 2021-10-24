@@ -25,15 +25,14 @@ namespace HometaskASP.Controllers
         [HttpPost]
         public IActionResult SomePing([FromBody] RequestUser request)
         {
-            if (request == null)
+            if (request.Name == null)
             {
                 return BadRequest();
             }
-
             var id = _usersService.CreateUser(new UserModel
             {
-                Name = request.name,
-                Age = request.age
+                Name = request.Name,
+                Age = request.Age
             });
 
             if (id == Guid.Empty)
@@ -45,9 +44,10 @@ namespace HometaskASP.Controllers
         }
 
         [Route("get")]
+        [HttpGet]
         public IActionResult Get()
         {
-            return Ok(db.Users.ToList());
+            return Ok(_usersService.GetAll());
         }
     }
 }

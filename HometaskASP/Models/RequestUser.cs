@@ -7,7 +7,7 @@ namespace HometaskASP.Models
 {
     public class RequestUser
     {
-        public string name;
-        public int age;
+        public string Name { get; set; }
+        public int Age { get; set; }
     }
 }

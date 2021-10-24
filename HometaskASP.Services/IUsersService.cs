@@ -10,5 +10,7 @@ namespace HometaskASP.Services
     public interface IUsersService
     {
         public Guid CreateUser(UserModel user);
+
+        public List<UserModel> GetAll();
     }
 }
