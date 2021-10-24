@@ -1,34 +1,50 @@
-﻿using HometaskASP.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomataskASP.DataAccess;
 using HomataskASP.DataAccess.Models;
+using HometaskASP.Models;
+using HometaskASP.Services;
+using HometaskASP.Services.Models;
 
 namespace HometaskASP.Controllers
 {
     public class HomeController : Controller
-    {
+    {        
         private readonly DataContext db;
-
-        public HomeController(DataContext dataContext)
+        private readonly IUsersService _usersService;
+        public HomeController(DataContext dataContext, IUsersService usersService)
         {
             db = dataContext;
+            _usersService = usersService;
         }
-        
+
         [Route("create")]
-        public IActionResult Create(string name, int age)
+        [HttpPost]
+        public IActionResult SomePing([FromBody] RequestUser request)
         {
-            DBUser user1 = new DBUser { Name = name, Age = age };
+            if (request == null)
+            {
+                return BadRequest();
+            }
 
-            db.Users.AddRange(user1);
-            db.SaveChanges();
+            var id = _usersService.CreateUser(new UserModel
+            {
+                Name = request.name,
+                Age = request.age
+            });
 
-            return Ok($"Добавлены в бд {user1.Name}.");
+            if (id == Guid.Empty)
+            {
+                return new StatusCodeResult(500);
+            }
+
+            return Ok($"Создан пользователь с id {id}");
         }
-        [Route("Get")]
+
+        [Route("get")]
         public IActionResult Get()
         {
             return Ok(db.Users.ToList());

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace HometaskASP.Services
+namespace HometaskASP.Models
 {
-    public interface ISomeService
+    public class RequestUser
     {
-        public void Update();
+        public string name;
+        public int age;
     }
 }

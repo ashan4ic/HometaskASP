@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HometaskASP.Services.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace HometaskASP.Services
 {
-    public class SomeModel
+    public interface IUsersService
     {
-        int number1;
-        int number2;
+        public Guid CreateUser(UserModel user);
     }
 }
