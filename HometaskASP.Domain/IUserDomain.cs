@@ -11,6 +11,10 @@ namespace HometaskASP.Domain
     {
         public DBUser Add(DBUser user);
 
+        public DBUser Remove(DBUser user);
+
+        public DBUser Update(DBUser user);
+
         public List<DBUser> GetAll();
     }
 }

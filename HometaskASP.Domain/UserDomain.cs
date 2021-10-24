@@ -29,9 +29,37 @@ namespace HometaskASP.Domain
             return user;
         }
 
+        public DBUser Remove(DBUser user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+
+            _db.Users.Remove(user);
+            _db.SaveChanges();
+            return user;
+        }
         public List<DBUser> GetAll()
         {
             return _db.Users.ToList();
+        }
+
+        public DBUser Update(DBUser user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+
+            var UpUser = _db.Users.Where(c => c.Id == user.Id).FirstOrDefault();
+
+            UpUser.Name = user.Name;
+            UpUser.Age = user.Age;
+
+            _db.SaveChanges();
+
+            return UpUser;
         }
     }
 }
