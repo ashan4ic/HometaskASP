@@ -4,8 +4,6 @@ using HometaskASP.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HometaskASP.Services
 {
@@ -17,52 +15,55 @@ namespace HometaskASP.Services
         {
             _userDomain = userDomain;
         }
+
         public Guid CreateUser(UserModel user)
         {
-            var dbUser = _userDomain.Add(new DBUser
+            var dbUser = _userDomain.Add(new DbUser
             {
                 Name = user.Name,
                 Age = user.Age
             });
 
-            return dbUser?.Id == null ? Guid.Empty : (Guid)dbUser.Id;
+            return dbUser?.Id ?? Guid.Empty;
         }
 
-        public List<UserModel> GetAll()
+        public List<UserModel> Get()
         {
-            List<DBUser> newList = _userDomain.GetAll();
+            return _userDomain.Get()
+                .Select(x => new UserModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Age = x.Age
+                })
+                .ToList();
+        }
 
-            List<UserModel> result = new List<UserModel>();
+        public List<UserModel> Get(int page, int count)
+        {
+            return _userDomain.Get()
+                .OrderBy(x => x.Id)
+                .Skip((page - 1) * count)
+                .Take(count)
+                .Select(x => new UserModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Age = x.Age
+                })
+                .ToList();
+        }
 
-            foreach (var item in newList)
+        public bool Delete(Guid Id)
+        {
+            DbUser delUser = _userDomain.Get().FirstOrDefault(x => x.Id == Id);
+
+            if (delUser == null) 
             {
-                result.Add(new UserModel { Id = item.Id, Name = item.Name, Age = item.Age });
+                return true;
             }
 
-            return result;
-        }
-
-        public List<UserModel> GetAll(int page, int count)
-        {
-            List<DBUser> newList = _userDomain.GetAll();
-
-            List<UserModel> result = new List<UserModel>();
-
-            foreach (var item in newList)
-            {
-                result.Add(new UserModel { Id = item.Id, Name = item.Name, Age = item.Age });
-            }
-
-            return result.OrderBy(x => x.Id).Skip((page - 1) * count).Take(count).ToList();
-        }
-
-        public UserModel Delete(Guid Id)
-        {
-            DBUser delUser = _userDomain.GetAll().FirstOrDefault(x => x.Id == Id);
-            
-            if (delUser != null) _userDomain.Remove(delUser);
-
-            return new UserModel { Id = Id, Name = delUser.Name, Age = delUser.Age };
+            return _userDomain.Remove(delUser);
         }
 
         public Guid Put(UserModel user)
@@ -71,19 +72,18 @@ namespace HometaskASP.Services
             {
                 return Guid.Empty;
             }
-            if (!_userDomain.GetAll().Any(x => x.Id == user.Id))
+
+            var dbUser = _userDomain.Get().FirstOrDefault(x => x.Id == user.Id);
+
+            if (dbUser == null)
             {
                 return Guid.Empty;
             }
 
-            var UpUser = _userDomain.Update(new DBUser
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Age = user.Age
-            });
+            dbUser.Name = user.Name;
+            dbUser.Age = user.Age;
 
-            return UpUser.Id;
+            return _userDomain.Update(dbUser)?.Id ?? Guid.Empty;
         }
     }
 }

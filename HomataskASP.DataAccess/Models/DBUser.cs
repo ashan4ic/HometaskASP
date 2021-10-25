@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HomataskASP.DataAccess.Models
 {
-    public class DBUser
+    public class DbUser
     {
         [Key]
         [Required]

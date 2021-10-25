@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HomataskASP.DataAccess;
-using HomataskASP.DataAccess.Models;
 using HometaskASP.Models;
 using HometaskASP.Services;
 using HometaskASP.Services.Models;
@@ -14,19 +9,15 @@ namespace HometaskASP.Controllers
     public class HomeController : Controller
     {        
         private readonly IUsersService _usersService;
-        public HomeController(DataContext dataContext, IUsersService usersService)
+        public HomeController(IUsersService usersService)
         {
             _usersService = usersService;
         }
 
         [Route("create")]
         [HttpPost]
-        public IActionResult SomePing([FromBody] RequestUser request)
+        public IActionResult Create([FromBody] RequestUser request)
         {
-            if (request == null)
-            {
-                return BadRequest();
-            }
             var id = _usersService.CreateUser(new UserModel
             {
                 Name = request.Name,
@@ -45,32 +36,32 @@ namespace HometaskASP.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_usersService.GetAll());
+            return Ok(_usersService.Get());
         }
 
         [Route("get/{page}/{count}")]
         [HttpGet]
         public IActionResult Get(int page, int count)
         {
-            return Ok(_usersService.GetAll(page, count));
+            return Ok(_usersService.Get(page, count));
         }
 
         [Route("delete/{Id}")]
         [HttpDelete]
-        public IActionResult Delete(Guid Id)
+        public IActionResult Delete(Guid id)
         {
-            var delUser = _usersService.Delete(Id);
-            return Ok($"пользователь {delUser.Name} удален");
+            if (!_usersService.Delete(id))
+            {
+                return StatusCode(500);
+            }
+
+            return Ok($"пользователь {id} удален");
         }
 
         [Route("update")]
         [HttpPut]
         public IActionResult Put([FromBody] UpdateUser update)
         {
-            if (update == null)
-            {
-                return BadRequest();
-            }
             var id = _usersService.Put(new UserModel
             {
                 Id = update.Id,

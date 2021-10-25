@@ -1,10 +1,6 @@
 ﻿using HomataskASP.DataAccess;
 using HomataskASP.DataAccess.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HometaskASP.Domain
 {
@@ -17,7 +13,7 @@ namespace HometaskASP.Domain
             _db = dataContext;
         }
 
-        public DBUser Add(DBUser user)
+        public DbUser Add(DbUser user)
         {
             if (user == null)
             {
@@ -29,37 +25,32 @@ namespace HometaskASP.Domain
             return user;
         }
 
-        public DBUser Remove(DBUser user)
+        public bool Remove(DbUser user)
         {
             if (user == null)
             {
-                return null;
+                return true;
             }
 
             _db.Users.Remove(user);
-            _db.SaveChanges();
-            return user;
-        }
-        public List<DBUser> GetAll()
-        {
-            return _db.Users.ToList();
+            return _db.SaveChanges() != 0;
         }
 
-        public DBUser Update(DBUser user)
+        public IQueryable<DbUser> Get()
+        {
+            return _db.Users.AsQueryable();
+        }
+
+        public DbUser Update(DbUser user)
         {
             if (user == null)
             {
                 return null;
             }
 
-            var UpUser = _db.Users.Where(c => c.Id == user.Id).FirstOrDefault();
+            var upUser = _db.Users.Update(user);
 
-            UpUser.Name = user.Name;
-            UpUser.Age = user.Age;
-
-            _db.SaveChanges();
-
-            return UpUser;
+            return _db.SaveChanges() != 0 ? upUser.Entity : null;
         }
     }
 }

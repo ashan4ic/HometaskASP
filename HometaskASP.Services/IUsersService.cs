@@ -11,11 +11,11 @@ namespace HometaskASP.Services
     {
         public Guid CreateUser(UserModel user);
 
-        public List<UserModel> GetAll();
+        public List<UserModel> Get();
 
-        public List<UserModel> GetAll(int page, int count);
+        public List<UserModel> Get(int page, int count);
 
-        public UserModel Delete(Guid Id);
+        public bool Delete(Guid id);
 
         public Guid Put(UserModel user);
     }

@@ -1,16 +1,12 @@
 ﻿using HomataskASP.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomataskASP.DataAccess
 {
     public class DataContext : DbContext
     {
-        public DbSet<DBUser> Users { get; set; }
+        public DbSet<DbUser> Users { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             Database.EnsureCreated();
